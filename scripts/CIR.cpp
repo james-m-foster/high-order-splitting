@@ -79,10 +79,10 @@ double CIRmethods::euler_maruyama(double y0, double brownian_increment){
     return max(0.0, y0 + a*(b - y0)*step_size + sigma*sqrt(y0)*brownian_increment);
 };
 
-// Compute one step of the Milstein method (always non-negative)
+// Compute one step of the (non-negative) Milstein method
 double CIRmethods::milstein(double y0, double brownian_increment){
 
-    return ah*(tilde_b - y0) + pow(sqrt(y0) + half_sigma*brownian_increment, 2);
+    return max(0.0, ah*(tilde_b - y0) + pow(sqrt(y0) + half_sigma*brownian_increment, 2));
 };
 
 // Compute one step of the drift-implicit Euler method from Alfonsi (2005)
