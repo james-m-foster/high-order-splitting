@@ -39,6 +39,7 @@ sigma2 = 1.0
 # Useful precomputed constants
 one_over_epsilon = 1.0/epsilon
 two_over_epsilon = 2.0/epsilon
+half_epsilon = 0.5*epsilon
 two_gamma = 2.0*gamma
 kappa = (4.0*gamma / epsilon) - 1.0
 root_kappa = math.sqrt(abs(kappa))
@@ -92,7 +93,8 @@ def tamed_euler_maruyama(vu, h, w):
 def solve_linear_ODE(vu, h):
     if (kappa == 0.0):  
         c1 = 1.0
-        c2 = 0.5*h        
+        c2 = 0.5*h    
+        c3 = half_epsilon * c2
     else:
         if kappa > 0.0:
             cos_term = math.cos(half_root_kappa*h)
@@ -103,9 +105,10 @@ def solve_linear_ODE(vu, h):
     
         c1 = cos_term
         c2 = one_over_root_kappa*sin_term
-    
+        c3 = two_gamma * c2
+        
     exp_matrix = np.array([[c1 + c2, - two_over_epsilon*c2],
-                           [two_gamma*c2, c1 - c2]])
+                           [c3, c1 - c2]])
     
     return math.exp(-0.5*h)*np.matmul(exp_matrix, vu)
 
